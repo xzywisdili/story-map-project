@@ -1,0 +1,316 @@
+body {
+  margin: 0;
+  border-width: 0;
+  box-sizing: border-box;
+  height: 100vh;
+
+  font-family: 'Open Sans', sans-serif;
+}
+
+.map-container {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 0;
+}
+
+.map {
+  height: 100%;
+}
+
+.slide-section {
+  position: relative;
+  margin-top: -30vh;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.slide {
+  margin-top: 90vh;
+  margin-bottom: 90vh;
+  margin-left: auto;
+  margin-right: 2rem;
+  padding: 1rem;
+  box-shadow: -0.5rem 0 1rem rgba(0 0 0 / 50%);
+  border: 1px solid gray;
+  border-radius: 0.5rem;
+  pointer-events: initial;
+
+  width: 25rem;
+
+  background-color: white;
+  color: black;
+}
+
+.slide:first-child {
+  margin-top: 0;
+}
+
+.slide:last-child {
+  margin-bottom: 40vh;
+}
+
+.slide-controls {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  column-gap: 0.5rem;
+
+  width: 100%;
+}
+
+.slide-nav-button {
+  transition: all 0.1s;
+
+  padding: 0;
+  margin: 1rem;
+  width: 4rem;
+  height: 3rem;
+  border: 1px solid #888;
+  border-radius: 0.25rem;
+
+  background-color: #eee;
+  font-size: 1.5em;
+}
+
+.slide-nav-button:hover {
+  background-color: #444;
+  color: #fff;
+}
+
+.slide-nav-select {
+  min-width: 0;
+}
+
+/* 小图例容器（左上角） */
+.leaflet-control.legend {
+  background: rgba(255,255,255,.9);
+  padding: .5rem .75rem;
+  border: 1px solid #bbb;
+  border-radius: .5rem;
+  font-size: .9rem;
+  line-height: 1.25;
+}
+
+/* 右下角引用面板 */
+.credits-panel {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 1000;
+  font-size: 0.9rem;
+}
+
+.credits-panel details {
+  background: rgba(255,255,255,.95);
+  border: 1px solid #bbb;
+  border-radius: .5rem;
+  padding: .5rem .75rem;
+  max-width: 22rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+}
+.credits-panel summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.credits-panel ul {
+  margin: .5rem 0 0 1rem;
+  padding: 0;
+}
+
+.leaflet-control.legend {
+  background: rgba(255,255,255,.9);
+  padding: .5rem .75rem;
+  border: 1px solid #bbb;
+  border-radius: .5rem;
+  font-size: .9rem;
+  line-height: 1.25;
+}
+
+.credits-panel {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 1000;
+  font-size: 0.9rem;
+}
+.credits-panel details {
+  background: rgba(255,255,255,.95);
+  border: 1px solid #bbb;
+  border-radius: .5rem;
+  padding: .5rem .75rem;
+  max-width: 22rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+}
+.credits-panel summary { cursor: pointer; font-weight: 600; }
+.credits-panel ul { margin: .5rem 0 0 1rem; padding: 0; }
+
+.leaflet-tooltip.perm-tip {
+  background: rgba(255,255,255,.95);
+  border: 1px solid #bbb;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+
+/* ---------- Slide typography & layout upgrades ---------- */
+:root{
+  --card-bg: rgba(255,255,255,.92);
+  --card-bd: rgba(0,0,0,.10);
+  --ink: #1e1f21;
+  --muted: #5b6168;
+  --accent: #2b8cbe; /* 跟地图配色呼应 */
+}
+
+.slide{
+  width: min(32rem, 92vw);
+  margin-right: clamp(1rem, 4vw, 3rem);
+  padding: 1.25rem 1.25rem 1rem;
+  border: 1px solid var(--card-bd);
+  border-radius: 14px;
+  background: var(--card-bg);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 28px rgba(0,0,0,.15);
+  color: var(--ink);
+}
+
+/* 顶部彩线 + 微小标题（eyebrow） */
+.slide::before{
+  content: "";
+  display: block;
+  height: 4px;
+  border-radius: 6px 6px 0 0;
+  margin: -1.25rem -1.25rem 0.75rem -1.25rem;
+  background: linear-gradient(90deg, #31A354, #2B8CBE, #B10026);
+  opacity:.85;
+}
+
+.slide h1, .slide h2{
+  margin: .2rem 0 .4rem;
+  line-height: 1.2;
+  letter-spacing: .2px;
+}
+
+.slide h1{
+  font-size: clamp(1.4rem, 2.2vw + 1rem, 1.9rem);
+  font-weight: 700;
+}
+
+.slide h2{
+  font-size: clamp(1.15rem, 1.6vw + .9rem, 1.5rem);
+  font-weight: 700;
+}
+
+.slide p{
+  margin: .6rem 0;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+.slide em{ color: var(--accent); font-style: normal; font-weight: 600; }
+
+.eyebrow{
+  display:inline-block;
+  font-size:.78rem;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color: var(--muted);
+  margin-bottom:.25rem;
+}
+
+.muted{ color: var(--muted); }
+
+/* ---------- Media slot (image placeholder) ---------- */
+.slide-media{
+  margin: .6rem 0 .2rem;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f3f5f7;
+  border: 1px dashed rgba(0,0,0,.12);
+  position: relative;
+  aspect-ratio: 16/9; 
+}
+
+.slide-media img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display:block;
+  border: 0;
+}
+
+.slide-caption{
+  font-size: .82rem;
+  color: var(--muted);
+  margin-top: .25rem;
+}
+
+.slide-media[data-empty="true"]::after{
+  content: "Drop an image URL via data-img, or place an <img> here";
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  color: #98a2ad; font-size:.9rem;
+}
+
+.leaflet-tooltip.perm-tip {
+  background: rgba(255,255,255,.96);
+  border: 1px solid #bbb;
+  padding: 2px 6px;
+  font-size: 12px;
+  border-radius: 6px;
+}
+
+/* ---------- Slide Heading Styles ---------- */
+
+/* Big page title (h1) */
+.slide h1 {
+  font-size: clamp(1.8rem, 2.5vw + 1rem, 2.4rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: #222;
+  position: relative;
+  margin-bottom: .75rem;
+  letter-spacing: -0.02em;
+}
+
+/* Add a subtle underline accent bar */
+.slide h1::after {
+  content: "";
+  display: block;
+  width: 50px;
+  height: 4px;
+  margin-top: .4rem;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #2B8CBE, #31A354);
+}
+
+/* Section title (h2) */
+.slide h2 {
+  font-size: clamp(1.4rem, 2vw + .6rem, 1.8rem);
+  font-weight: 700;
+  line-height: 1.25;
+  color: #2B2B2B;
+  margin-bottom: .5rem;
+  letter-spacing: .01em;
+  position: relative;
+  padding-left: .6rem;
+}
+
+/* Left accent bar for h2 */
+.slide h2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.2em;
+  bottom: 0.2em;
+  width: 4px;
+  border-radius: 3px;
+  background: #B10026;
+}
+
+/* Optional subtitle (small text under h1/h2) */
+.slide .subtitle {
+  font-size: .95rem;
+  color: #666;
+  margin-bottom: .8rem;
+  line-height: 1.4;
+}

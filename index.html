@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Story</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+  <main>
+    <div class="map-container">
+      <div class="map" id="map"></div>
+    </div>
+    <section class="slide-section">
+      <!-- Slide 1: Citywide rules at a glance -->
+      <article
+        class="slide"
+        id="title-slide"
+        data-files="Vending_Prohibited_Streets.geojson,Vending_Prohibited_Areas.geojson"
+        data-showpopups="false"
+      >
+        <h1>Where Can Vendors Actually Set Up?</h1>
+        <p>Before we zoom into favorite corners and local hangouts, here’s the citywide backdrop:
+          <strong>prohibited streets</strong> and <strong>prohibited areas</strong>. These are the “no-go” layers that
+          shape the daily reality for street vendors in Philadelphia.</p>
+        <p><em>Takeaway:</em> Big swaths of the grid are off-limits. Everything else in our story tries to
+          work around these lines and polygons.</p>
+      </article>
+
+      <!-- Slide 2: Special vending districts -->
+      <article
+        class="slide"
+        id="second-slide"
+        data-files="Vending_Special_Districts.geojson"
+        data-showpopups="false"
+      >
+        <h2>Not All Sidewalks Are Equal</h2>
+        <p>Some places operate under special rules—think of them as “house rules” for vending. These districts
+          can open doors or add constraints depending on the neighborhood vibe and foot traffic rhythms.</p>
+        <p><em>Takeaway:</em> Same city, different playbooks. Vendors read the fine print street by street.</p>
+      </article>
+
+      <!-- Slide 3: Exceptions -->
+      <article
+        class="slide"
+        id="third-slide"
+        data-files="Vending_Prohibition_Exceptions.geojson,Vending_Prohibited_Streets.geojson"
+        data-showpopups="true"
+      >
+        <h2>Threading the Needle</h2>
+        <p>Rules always leave seams. Exceptions are those tiny openings vendors memorize by heart—specific blocks,
+          time windows, or conditions that make a pitch possible.</p>
+        <p><em>Takeaway:</em> Opportunity often lives in the margins. Blink and you’ll miss it.</p>
+      </article>
+
+      <!-- Slide 4: Bus Shelters (demand proxy) -->
+      <article
+        class="slide"
+        id="fourth-slide"
+        data-files="bus_transit_shelters.geojson"
+        data-showpopups="false">
+        <span class="eyebrow">Ridership & Routine</span>
+        <h2>Where People Wait (and Buy Snacks)</h2>
+        <img style="max-width: 100%" src="https://www.phila.gov/media/20190531131415/New_Bus_Shelter_27_Credit_Intersection_small.jpg">
+        <p>Bus shelters are little beacons of everyday life—queues, quick bites, coffee, umbrellas on rainy days.
+          They hint at <em>steady foot traffic</em>, the kind that keeps small vendors afloat.</p>
+        <p class="muted"><strong>Takeaway:</strong> Compare these dots with the “no-go” layers. Are we pushing vendors
+          away from where riders actually are?</p>
+      </article>
+
+      <!-- Slide 5: Parks & Recreation Districts -->
+      <article
+        class="slide"
+        id="fifth-slide"
+        data-files="PPR_Districts_2018.geojson"
+        data-showpopups="false"
+      >
+        <h2>Parks as Neighborhood Living Rooms</h2>
+        <img style="max-width: 100%;" src="https://www.visitphilly.com/wp-content/uploads/2019/03/Franklin-Square-_2017_J-Fusco-Historic-Philadelphia-Inc-1200x900-1044x781.jpg">
+        <p>Recreation districts stitch together fields, trails, and playgrounds—weekend tournaments, summer camps,
+          movie nights in the park. They’re community magnets.</p>
+        <p><em>Takeaway:</em> When vending rules meet park life, the question becomes: do we enable
+          low-cost treats and services near these community hubs—or fence them out?</p>
+      </article>
+    </section>
+
+    <!-- Credits panel (citations inside the interface) -->
+    <div class="credits-panel">
+      <details>
+        <summary>Data &amp; Citations</summary>
+        <ul>
+          <li>Vending Prohibited Streets / Areas — City of Philadelphia (OpenDataPhilly)</li>
+          <li>Special Vending Districts — City of Philadelphia (OpenDataPhilly)</li>
+          <li>Vending Prohibition Exceptions — City of Philadelphia (OpenDataPhilly)</li>
+          <li>Bus Transit Shelters — City of Philadelphia / Transit data portals</li>
+          <li>PPR Districts (2018) — Philadelphia Parks &amp; Recreation</li>
+          <li>Legal basis: The Philadelphia Code §9-204, §9-206</li>
+        </ul>
+      </details>
+    </div>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/index.js" type="module"></script>
+</body>
+</html>
