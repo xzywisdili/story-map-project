@@ -26,15 +26,21 @@ class SlideDeck {
 
       // Polygons
       if (/Polygon/i.test(g)) {
-        // Defaults
-        let fillColor = '#FD8D3C'; // prohibited areas
+
+        let fillColor = '#FD8D3C';
         let fillOpacity = 0.45;
 
-        if (src.includes('special')) { fillColor = '#31A354'; } // special vending districts (green)
-        if (src.includes('ppr_districts')) { fillColor = '#2CA1B8'; fillOpacity = 0.35; } // PPR (soft teal)
+        if (src.includes('special')) {       
+          fillColor = '#31A354';
+        }
+        if (src.includes('ppr_properties')) {   
+          fillColor = '#2CA1B8';
+          fillOpacity = 0.35;
+        }
 
         return { color: '#666', weight: 1, fillColor, fillOpacity, opacity: 0.8 };
       }
+
 
       // Points (fallback)
       return { color: '#2B8CBE', weight: 2 };
@@ -57,7 +63,12 @@ class SlideDeck {
 
     const tooltipText = (f) => {
       const p = f.properties || {};
-      const candidates = ['label','name','Name','street','Street','TITLE','Title','STOP_NAME','SHELTER_NA','DISTRICT','PPR_DIST'];
+      const candidates = [
+        'label','name','Name','street','Street','TITLE','Title',
+        'STOP_NAME','SHELTER_NA','DISTRICT','PPR_DIST',
+        // PPR:
+        'property_name','PROPERTY_NAME','SITE_NAME'
+      ];
       const k = candidates.find((kk) => p[kk] != null);
       return k ? p[k] : (p._src || '');
     };
@@ -84,24 +95,73 @@ class SlideDeck {
   }
 
   async getSlideFeatureCollection(slide) {
-    const filesAttr = slide.getAttribute('data-files') || `${slide.id}.json`;
-    const files = filesAttr.split(',').map(s => s.trim());
+  const filesAttr = slide.getAttribute('data-files') || `${slide.id}.json`;
+  const files = filesAttr.split(',').map(s => s.trim());
 
-    const features = [];
-    for (const fname of files) {
-      const resp = await fetch(`data/${fname}`);
-      const gj = await resp.json();
-      const srcTag = fname.replace(/\.geojson$/i, '');
-      if (gj && gj.type === 'FeatureCollection' && Array.isArray(gj.features)) {
-        gj.features.forEach(f => {
-          f.properties = f.properties || {};
-          f.properties._src = srcTag;
-          features.push(f);
-        });
-      }
+  const PPR_KEEP = new Set([
+    'NEIGHBORHOOD_PARK',
+    'RECREATIONAL_PARK',
+    'PARK',
+    'PLAYGROUND_SITE',
+    'ATHLETIC_SITE',
+    'WATERSHED_PARK',
+    'CONSERVATION',  
+    'BREEZEWAY_GREENWAY'
+  ]);
+
+  const PPR_EXCLUDE = new Set([
+    'PPR_OPERATIONS_FACILITY',
+    'OPERATIONAL_INTERNAL',   
+    'OPERATIONAL_INTERNAL ',
+    'TRAFFIC_ISLAND_MEDIAN',
+    'TAFFIC_ISLAND_MEDIAN',  
+    'OTHER',
+    'MANAGED_SITE',          
+    'EVENT_VENUE',           
+    'OLDER_ADULT_CENTER'    
+  ]);
+
+  const features = [];
+
+  for (const fname of files) {
+    const resp = await fetch(`data/${fname}`);
+    const gj = await resp.json();
+    const srcTag = fname.replace(/\.geojson$/i, '');
+
+    if (gj && gj.type === 'FeatureCollection' && Array.isArray(gj.features)) {
+      gj.features.forEach(f => {
+        f.properties = f.properties || {};
+        f.properties._src = srcTag;
+
+        if (/ppr_properties/i.test(srcTag)) {
+          const clsRaw =
+            f.properties.property_classification ??
+            f.properties.PROPERTY_CLASSIFICATION ??
+            '';
+          const cls = String(clsRaw).trim().toUpperCase();
+
+          if (PPR_EXCLUDE.has(cls)) return;
+
+          if (PPR_KEEP.size > 0 && !PPR_KEEP.has(cls)) return;
+
+          f.properties._label_hint =
+            f.properties.property_name ||
+            f.properties.PROPERTY_NAME ||
+            f.properties.SITE_NAME ||
+            f.properties.NAME ||
+            null;
+
+          f.properties._ppr_class = cls;
+        }
+
+        features.push(f);
+      });
     }
-    return { type: 'FeatureCollection', features };
   }
+
+  return { type: 'FeatureCollection', features };
+}
+
 
   hideAllSlides() {
     for (const slide of this.slides) slide.classList.add('hidden');

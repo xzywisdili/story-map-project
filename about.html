@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>About · Street Vending Story Map</title>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;800&display=swap" rel="stylesheet" />
+
+  <!-- Project CSS -->
+  <link rel="stylesheet" href="css/index.css" />
+</head>
+<body>
+
+    <header class="site-header" role="banner">
+        <nav class="site-nav" aria-label="Primary">
+            <a class="brand" href="index.html">Street Vending Story Map</a>
+            <ul class="nav-links" role="list">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html" aria-current="page" class="is-active">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+
+
+  <!-- Skip link for keyboard users -->
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- Sticky full-height map background -->
+  <div class="map-container" aria-hidden="true">
+    <div class="map" id="map"></div>
+  </div>
+
+  <main id="main" class="about-layout" role="main">
+    <article class="about-card" aria-labelledby="about-title">
+        <header>
+        <h1 id="about-title">About This Story Map</h1>
+        <p class="subtitle">Street vending rules & everyday spaces in Philadelphia</p>
+        </header>
+
+        <section>
+        <h2>Why This Map?</h2>
+        <p>
+            Philadelphia’s vendors navigate a patchwork of <strong>prohibited zones</strong>,
+            <strong>special districts</strong>, and <strong>small exceptions</strong>.
+            This map visualizes those rules alongside everyday demand signals like
+            bus stops and parks.
+        </p>
+        </section>
+
+        <section>
+        <h2>Who It’s For</h2>
+        <p>
+            <em>Jasmine, a new food cart operator</em>—she needs to quickly see
+            where vending is legal and where customers actually gather.
+        </p>
+        </section>
+
+        <section>
+        <h2>Data Sources</h2>
+        <ul>
+            <li>City of Philadelphia OpenDataPhilly layers</li>
+            <li>Philadelphia Parks & Recreation districts</li>
+            <li>The Philadelphia Code §9-204, §9-206</li>
+        </ul>
+        </section>
+
+        <footer class="about-footer">
+        <a class="btn btn-primary" href="index.html">← Back to Story</a>
+        </footer>
+    </article>
+    </main>
+
+  <!-- Map + minimal JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/about.js" type="module"></script>
+</body>
+</html>

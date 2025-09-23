@@ -12,6 +12,21 @@
   <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
+
+  <header class="site-header" role="banner">
+    <nav class="site-nav" aria-label="Primary">
+      <a class="brand" href="index.html" aria-label="Go to Story map home">
+        Street Vending Story Map
+      </a>
+      <ul class="nav-links" role="list">
+        <li><a href="index.html" aria-current="page">Home</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+    </nav>
+  </header>
+
+
+
   <main>
     <div class="map-container">
       <div class="map" id="map"></div>
@@ -65,7 +80,7 @@
         data-files="bus_transit_shelters.geojson"
         data-showpopups="false">
         <span class="eyebrow">Ridership & Routine</span>
-        <h2>Where People Wait (and Buy Snacks)</h2>
+        <h2>Where People Wait and Buy Snacks</h2>
         <img style="max-width: 100%" src="https://www.phila.gov/media/20190531131415/New_Bus_Shelter_27_Credit_Intersection_small.jpg">
         <p>Bus shelters are little beacons of everyday life—queues, quick bites, coffee, umbrellas on rainy days.
           They hint at <em>steady foot traffic</em>, the kind that keeps small vendors afloat.</p>
@@ -77,16 +92,17 @@
       <article
         class="slide"
         id="fifth-slide"
-        data-files="PPR_Districts_2018.geojson"
+        data-files="PPR_Properties.geojson"
         data-showpopups="false"
       >
         <h2>Parks as Neighborhood Living Rooms</h2>
-        <img style="max-width: 100%;" src="https://www.visitphilly.com/wp-content/uploads/2019/03/Franklin-Square-_2017_J-Fusco-Historic-Philadelphia-Inc-1200x900-1044x781.jpg">
-        <p>Recreation districts stitch together fields, trails, and playgrounds—weekend tournaments, summer camps,
-          movie nights in the park. They’re community magnets.</p>
-        <p><em>Takeaway:</em> When vending rules meet park life, the question becomes: do we enable
-          low-cost treats and services near these community hubs—or fence them out?</p>
+        <img style="max-width: 100%;" src="https://www.visitphilly.com/wp-content/uploads/2019/03/Franklin-Square-_2017_J-Fusco-Historic-Philadelphia-Inc-1200x900-1044x781.jpg" alt="Philadelphia park scene">
+        <p>Parks and recreation properties cover a wide range of community spaces. These sites host weekend tournaments, summer camps, or casual family outings, 
+          and serve as everyday “third places.”</p>
+        <p><em>Takeaway:</em> With vending rules overlaid on these park units, the real question is whether small, 
+          low-cost services can be part of the park experience—or are pushed away from the very spaces where people gather.</p>
       </article>
+
     </section>
 
     <!-- Credits panel (citations inside the interface) -->
@@ -94,12 +110,39 @@
       <details>
         <summary>Data &amp; Citations</summary>
         <ul>
-          <li>Vending Prohibited Streets / Areas — City of Philadelphia (OpenDataPhilly)</li>
-          <li>Special Vending Districts — City of Philadelphia (OpenDataPhilly)</li>
-          <li>Vending Prohibition Exceptions — City of Philadelphia (OpenDataPhilly)</li>
-          <li>Bus Transit Shelters — City of Philadelphia / Transit data portals</li>
-          <li>PPR Districts (2018) — Philadelphia Parks &amp; Recreation</li>
-          <li>Legal basis: The Philadelphia Code §9-204, §9-206</li>
+          <li>
+            <a href="https://opendataphilly.org/datasets/vending-prohibited-areas/" target="_blank" rel="noopener">
+              Vending Prohibited Areas
+            </a> — City of Philadelphia (OpenDataPhilly)
+          </li>
+          <li>
+            <a href="https://opendataphilly.org/datasets/vending-prohibited-streets/" target="_blank" rel="noopener">
+              Vending Prohibited Streets
+            </a> — City of Philadelphia (OpenDataPhilly)
+          </li>
+          <li>
+            <a href="https://opendataphilly.org/datasets/special-vending-districts/" target="_blank" rel="noopener">
+              Special Vending Districts
+            </a> — City of Philadelphia (OpenDataPhilly)
+          </li>
+          <li>
+            <a href="https://opendataphilly.org/datasets/vending-prohibition-exceptions/" target="_blank" rel="noopener">
+              Vending Prohibition Exceptions
+            </a> — City of Philadelphia (OpenDataPhilly)
+          </li>
+          <li>
+            <a href="https://opendataphilly.org/datasets/bus-shelters/" target="_blank" rel="noopener">
+              Bus Transit Shelters
+            </a> — City of Philadelphia / Transit data portals
+          </li>
+          <li>
+            <a href="https://opendataphilly.org/datasets/ppr-properties/" target="_blank" rel="noopener">
+              PPR Properties
+            </a> — Philadelphia Parks &amp; Recreation
+            <span class="muted">
+              (filtered to community-facing classifications such as Neighborhood Parks, Playgrounds, Athletic Sites, Pools, etc.)
+            </span>
+          </li>
         </ul>
       </details>
     </div>

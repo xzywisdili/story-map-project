@@ -1,169 +1,93 @@
-body {
-  margin: 0;
-  border-width: 0;
-  box-sizing: border-box;
-  height: 100vh;
-
-  font-family: 'Open Sans', sans-serif;
+/* -------------------- Tokens & base -------------------- */
+:root{
+  --header-h: 60px;
+  --card-bg: rgba(255,255,255,.92);
+  --card-bd: rgba(0,0,0,.10);
+  --ink: #1e1f21;
+  --muted: #5b6168;
+  --accent: #2B8CBE;
 }
 
-.map-container {
+* { box-sizing: border-box; }
+
+body{
+  margin: 0;
+  height: 100vh;
+  font-family: 'Open Sans', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  color: var(--ink);
+  padding-top: var(--header-h); /* 留出导航高度 */
+}
+
+/* -------------------- Map canvas -------------------- */
+.map-container{
   position: sticky;
   top: 0;
   height: 100vh;
   z-index: 0;
 }
+.map{ height: 100%; }
 
-.map {
-  height: 100%;
+/* -------------------- Floating top nav -------------------- */
+.site-header{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1002;
+  display: flex; justify-content: center;
+  padding: .5rem 0;
+  pointer-events: none; /* 容器不拦截，内部可点 */
 }
-
-.slide-section {
-  position: relative;
-  margin-top: -30vh;
-  z-index: 100;
-  pointer-events: none;
+.site-nav{
+  width: min(1200px, 96vw);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem;
+  background: rgba(255,255,255,.90);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 14px;
+  padding: .55rem .8rem;
+  box-shadow: 0 10px 28px rgba(0,0,0,.15);
+  pointer-events: auto;
 }
-
-.slide {
-  margin-top: 90vh;
-  margin-bottom: 90vh;
-  margin-left: auto;
-  margin-right: 2rem;
-  padding: 1rem;
-  box-shadow: -0.5rem 0 1rem rgba(0 0 0 / 50%);
-  border: 1px solid gray;
-  border-radius: 0.5rem;
-  pointer-events: initial;
-
-  width: 25rem;
-
-  background-color: white;
-  color: black;
+.site-nav .brand{
+  font-weight: 800; letter-spacing: .2px;
+  text-decoration: none; color: var(--ink);
 }
-
-.slide:first-child {
-  margin-top: 0;
+.site-nav .nav-links{
+  list-style: none; margin: 0; padding: 0;
+  display: flex; gap: .35rem;
 }
-
-.slide:last-child {
-  margin-bottom: 40vh;
+.site-nav .nav-links a{
+  display: inline-block;
+  padding: .38rem .7rem;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--ink);
+  border: 1px solid transparent;
+  transition: .15s ease;
 }
-
-.slide-controls {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  column-gap: 0.5rem;
-
-  width: 100%;
+.site-nav .nav-links a:hover,
+.site-nav .nav-links a:focus{
+  border-color: rgba(0,0,0,.22);
+  outline: none;
 }
-
-.slide-nav-button {
-  transition: all 0.1s;
-
-  padding: 0;
-  margin: 1rem;
-  width: 4rem;
-  height: 3rem;
-  border: 1px solid #888;
-  border-radius: 0.25rem;
-
-  background-color: #eee;
-  font-size: 1.5em;
-}
-
-.slide-nav-button:hover {
-  background-color: #444;
+.site-nav .nav-links a[aria-current="page"],
+.site-nav .nav-links .is-active{
+  background: var(--accent);
   color: #fff;
+  border-color: var(--accent);
 }
 
-.slide-nav-select {
-  min-width: 0;
+/* -------------------- Slides (right-aligned cards) -------------------- */
+.slide-section{
+  position: relative;
+  margin-top: -30vh; /* 提前在地图上方进入 */
+  z-index: 100;
+  pointer-events: none; /* 让滚动穿透容器 */
+  padding-top: .5rem;
 }
-
-/* 小图例容器（左上角） */
-.leaflet-control.legend {
-  background: rgba(255,255,255,.9);
-  padding: .5rem .75rem;
-  border: 1px solid #bbb;
-  border-radius: .5rem;
-  font-size: .9rem;
-  line-height: 1.25;
-}
-
-/* 右下角引用面板 */
-.credits-panel {
-  position: fixed;
-  right: 1rem;
-  bottom: 1rem;
-  z-index: 1000;
-  font-size: 0.9rem;
-}
-
-.credits-panel details {
-  background: rgba(255,255,255,.95);
-  border: 1px solid #bbb;
-  border-radius: .5rem;
-  padding: .5rem .75rem;
-  max-width: 22rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,.15);
-}
-.credits-panel summary {
-  cursor: pointer;
-  font-weight: 600;
-}
-.credits-panel ul {
-  margin: .5rem 0 0 1rem;
-  padding: 0;
-}
-
-.leaflet-control.legend {
-  background: rgba(255,255,255,.9);
-  padding: .5rem .75rem;
-  border: 1px solid #bbb;
-  border-radius: .5rem;
-  font-size: .9rem;
-  line-height: 1.25;
-}
-
-.credits-panel {
-  position: fixed;
-  right: 1rem;
-  bottom: 1rem;
-  z-index: 1000;
-  font-size: 0.9rem;
-}
-.credits-panel details {
-  background: rgba(255,255,255,.95);
-  border: 1px solid #bbb;
-  border-radius: .5rem;
-  padding: .5rem .75rem;
-  max-width: 22rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,.15);
-}
-.credits-panel summary { cursor: pointer; font-weight: 600; }
-.credits-panel ul { margin: .5rem 0 0 1rem; padding: 0; }
-
-.leaflet-tooltip.perm-tip {
-  background: rgba(255,255,255,.95);
-  border: 1px solid #bbb;
-  padding: 2px 6px;
-  font-size: 12px;
-}
-
-/* ---------- Slide typography & layout upgrades ---------- */
-:root{
-  --card-bg: rgba(255,255,255,.92);
-  --card-bd: rgba(0,0,0,.10);
-  --ink: #1e1f21;
-  --muted: #5b6168;
-  --accent: #2b8cbe; /* 跟地图配色呼应 */
-}
-
 .slide{
   width: min(32rem, 92vw);
-  margin-right: clamp(1rem, 4vw, 3rem);
+  margin: 90vh clamp(1rem, 4vw, 3rem) 90vh auto; /* 右对齐、上下留白 */
   padding: 1.25rem 1.25rem 1rem;
   border: 1px solid var(--card-bd);
   border-radius: 14px;
@@ -171,9 +95,12 @@ body {
   backdrop-filter: blur(6px);
   box-shadow: 0 10px 28px rgba(0,0,0,.15);
   color: var(--ink);
+  pointer-events: initial; /* 卡片可交互 */
 }
+.slide:first-child{ margin-top: 0; }
+.slide:last-child{ margin-bottom: 40vh; }
 
-/* 顶部彩线 + 微小标题（eyebrow） */
+/* 彩线 */
 .slide::before{
   content: "";
   display: block;
@@ -184,74 +111,53 @@ body {
   opacity:.85;
 }
 
-.slide h1, .slide h2{
-  margin: .2rem 0 .4rem;
-  line-height: 1.2;
-  letter-spacing: .2px;
-}
-
+/* 文字层级 */
+.slide h1, .slide h2{ margin: .2rem 0 .4rem; line-height: 1.2; letter-spacing: .2px; }
 .slide h1{
-  font-size: clamp(1.4rem, 2.2vw + 1rem, 1.9rem);
-  font-weight: 700;
+  font-size: clamp(1.8rem, 2.5vw + 1rem, 2.4rem);
+  font-weight: 800; color: #222; margin-bottom: .75rem; letter-spacing: -0.02em; position: relative;
 }
-
+.slide h1::after{
+  content: ""; display: block; width: 50px; height: 4px; margin-top: .4rem;
+  border-radius: 2px; background: linear-gradient(90deg, #2B8CBE, #31A354);
+}
 .slide h2{
-  font-size: clamp(1.15rem, 1.6vw + .9rem, 1.5rem);
-  font-weight: 700;
+  font-size: clamp(1.4rem, 2vw + .6rem, 1.8rem);
+  font-weight: 700; line-height: 1.25; color: #2B2B2B;
+  margin-bottom: .5rem; letter-spacing: .01em; position: relative; padding-left: .6rem;
 }
-
-.slide p{
-  margin: .6rem 0;
-  line-height: 1.55;
-  color: var(--ink);
+.slide h2::before{
+  content: ""; position: absolute; left: 0; top: .2em; bottom: .2em;
+  width: 4px; border-radius: 3px; background: #B10026;
 }
-
+.slide p{ margin: .6rem 0; line-height: 1.55; }
 .slide em{ color: var(--accent); font-style: normal; font-weight: 600; }
 
-.eyebrow{
-  display:inline-block;
-  font-size:.78rem;
-  letter-spacing:.06em;
-  text-transform:uppercase;
-  color: var(--muted);
-  margin-bottom:.25rem;
-}
-
+.eyebrow{ display:inline-block; font-size:.78rem; letter-spacing:.06em; text-transform:uppercase; color: var(--muted); margin-bottom:.25rem; }
 .muted{ color: var(--muted); }
 
-/* ---------- Media slot (image placeholder) ---------- */
+/* 媒体占位 */
 .slide-media{
-  margin: .6rem 0 .2rem;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #f3f5f7;
-  border: 1px dashed rgba(0,0,0,.12);
-  position: relative;
-  aspect-ratio: 16/9; 
+  margin: .6rem 0 .2rem; border-radius: 12px; overflow: hidden;
+  background: #f3f5f7; border: 1px dashed rgba(0,0,0,.12); position: relative; aspect-ratio: 16/9;
 }
-
-.slide-media img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display:block;
-  border: 0;
-}
-
-.slide-caption{
-  font-size: .82rem;
-  color: var(--muted);
-  margin-top: .25rem;
-}
-
+.slide-media img{ width: 100%; height: 100%; object-fit: cover; display:block; border: 0; }
 .slide-media[data-empty="true"]::after{
   content: "Drop an image URL via data-img, or place an <img> here";
-  position: absolute; inset: 0;
-  display: grid; place-items: center;
-  color: #98a2ad; font-size:.9rem;
+  position: absolute; inset: 0; display: grid; place-items: center; color: #98a2ad; font-size:.9rem;
 }
+.slide-caption{ font-size: .82rem; color: var(--muted); margin-top: .25rem; }
 
-.leaflet-tooltip.perm-tip {
+/* -------------------- Leaflet UI -------------------- */
+.leaflet-control.legend{
+  background: rgba(255,255,255,.9);
+  padding: .5rem .75rem;
+  border: 1px solid #bbb;
+  border-radius: .5rem;
+  font-size: .9rem;
+  line-height: 1.25;
+}
+.leaflet-tooltip.perm-tip{
   background: rgba(255,255,255,.96);
   border: 1px solid #bbb;
   padding: 2px 6px;
@@ -259,58 +165,95 @@ body {
   border-radius: 6px;
 }
 
-/* ---------- Slide Heading Styles ---------- */
+/* Credits panel (bottom-right) */
+.credits-panel{
+  position: fixed; right: 1rem; bottom: 1rem;
+  z-index: 1000; font-size: .9rem;
+}
+.credits-panel details{
+  background: rgba(255,255,255,.95);
+  border: 1px solid #bbb;
+  border-radius: .5rem;
+  padding: .5rem .75rem;
+  max-width: 22rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+}
+.credits-panel summary{ cursor: pointer; font-weight: 600; }
+.credits-panel ul{ margin: .5rem 0 0 1rem; padding: 0; }
 
-/* Big page title (h1) */
-.slide h1 {
-  font-size: clamp(1.8rem, 2.5vw + 1rem, 2.4rem);
-  font-weight: 800;
-  line-height: 1.2;
-  color: #222;
-  position: relative;
-  margin-bottom: .75rem;
-  letter-spacing: -0.02em;
+/* -------------------- Accessibility -------------------- */
+:focus-visible{ outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.skip-link{
+  position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden;
+}
+.skip-link:focus{
+  position: fixed; left: 1rem; top: 1rem; z-index: 2000;
+  width: auto; height: auto; padding: .5rem .75rem;
+  background: var(--accent); color: #fff; border-radius: 8px;
 }
 
-/* Add a subtle underline accent bar */
-.slide h1::after {
-  content: "";
-  display: block;
-  width: 50px;
-  height: 4px;
-  margin-top: .4rem;
-  border-radius: 2px;
-  background: linear-gradient(90deg, #2B8CBE, #31A354);
-}
+/* -------------------- About page: centered floating card -------------------- */
+.about-layout{ position: relative; z-index: 1200; min-height: 100vh; }
 
-/* Section title (h2) */
-.slide h2 {
-  font-size: clamp(1.4rem, 2vw + .6rem, 1.8rem);
-  font-weight: 700;
-  line-height: 1.25;
-  color: #2B2B2B;
-  margin-bottom: .5rem;
-  letter-spacing: .01em;
-  position: relative;
-  padding-left: .6rem;
-}
+.about-card{
+  position: fixed;
+  top: calc(var(--header-h) + 24px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(800px, 90vw);
+  max-height: calc(100vh - var(--header-h) - 48px);
+  margin: 0;
+  overflow: auto;
+  z-index: 1201;
 
-/* Left accent bar for h2 */
-.slide h2::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.2em;
-  bottom: 0.2em;
-  width: 4px;
-  border-radius: 3px;
-  background: #B10026;
+  background: var(--card-bg);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 28px rgba(0,0,0,.15);
+  border: 1px solid var(--card-bd);
+  border-radius: 14px;
+  padding: 1.5rem;
 }
+.about-card header h1{
+  font-size: clamp(1.6rem, 2.2vw + 1rem, 2.3rem);
+  font-weight: 800; margin: .25rem 0 .35rem; letter-spacing: -0.02em;
+}
+.about-card .subtitle{ font-size: .98rem; color: var(--muted); margin-bottom: .75rem; }
+.about-card section{ margin-top: 1rem; }
+.about-card h2{
+  font-size: clamp(1.1rem, .9vw + 1rem, 1.4rem);
+  margin: .25rem 0 .5rem; position: relative; padding-left: .6rem;
+}
+.about-card h2::before{
+  content:""; position:absolute; left:0; top:.2em; bottom:.2em;
+  width:4px; border-radius:3px; background:#B10026;
+}
+.about-card p, .about-card li{ color: var(--ink); }
 
-/* Optional subtitle (small text under h1/h2) */
-.slide .subtitle {
-  font-size: .95rem;
-  color: #666;
-  margin-bottom: .8rem;
-  line-height: 1.4;
+/* Buttons used in about footer or credits link */
+.btn{
+  display: inline-block; border-radius: 10px; padding: .5rem .8rem;
+  text-decoration: none; border: 1px solid rgba(0,0,0,.15); color: var(--ink);
+}
+.btn-primary{ background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn-primary:focus, .btn-primary:hover{ filter: brightness(0.95); }
+
+/* Scrollbar polish for the about card (optional) */
+.about-card{ scrollbar-width: thin; scrollbar-color: #b7c3cc transparent; }
+.about-card::-webkit-scrollbar{ width: 8px; }
+.about-card::-webkit-scrollbar-thumb{ background: #b7c3cc; border-radius: 8px; }
+.about-card::-webkit-scrollbar-track{ background: transparent; }
+
+/* -------------------- Responsiveness -------------------- */
+@media (max-width: 880px){
+  :root{ --header-h: 64px; }
+  .site-nav{ gap: .5rem; }
+  .site-nav .brand{ font-size: .95rem; }
+  .site-nav .nav-links a{ padding: .34rem .6rem; }
+
+  .about-card{
+    width: 92vw;
+    max-height: calc(100vh - var(--header-h) - 24px);
+    top: calc(var(--header-h) + 12px);
+  }
 }
