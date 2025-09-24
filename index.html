@@ -1,154 +1,88 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>Story</title>
+  <title>About · Street Vending Story Map</title>
+
+  <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/index.css">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;800&display=swap" rel="stylesheet" />
+
+  <!-- Project CSS -->
+  <link rel="stylesheet" href="css/index.css" />
 </head>
 <body>
 
-  <header class="site-header" role="banner">
-    <nav class="site-nav" aria-label="Primary">
-      <a class="brand" href="index.html" aria-label="Go to Story map home">
-        Street Vending Story Map
-      </a>
-      <ul class="nav-links" role="list">
-        <li><a href="index.html" aria-current="page">Home</a></li>
-        <li><a href="about.html">About</a></li>
-      </ul>
-    </nav>
-  </header>
+    <header class="site-header" role="banner">
+        <nav class="site-nav" aria-label="Primary">
+            <a class="brand" href="about.html" aria-label="Go to About page">
+            Street Vending Story Map
+            </a>
+            <ul class="nav-links" role="list">
+            <li><a href="index.html" aria-current="page" class="is-active">Home</a></li>
+            <li><a href="map.html">Map</a></li>
+            </ul>
+        </nav>
+    </header>
 
+  <!-- Skip link for keyboard users -->
+  <a class="skip-link" href="#main">Skip to main content</a>
 
+  <!-- Sticky full-height map background -->
+  <div class="map-container" aria-hidden="true">
+    <div class="map" id="map"></div>
+  </div>
 
-  <main>
-    <div class="map-container">
-      <div class="map" id="map"></div>
-    </div>
-    <section class="slide-section">
-      <!-- Slide 1: Citywide rules at a glance -->
-      <article
-        class="slide"
-        id="title-slide"
-        data-files="Vending_Prohibited_Streets.geojson,Vending_Prohibited_Areas.geojson"
-        data-showpopups="false"
-      >
-        <h1>Where Can Vendors Actually Set Up?</h1>
-        <p>Before we zoom into favorite corners and local hangouts, here’s the citywide backdrop:
-          <strong>prohibited streets</strong> and <strong>prohibited areas</strong>. These are the “no-go” layers that
-          shape the daily reality for street vendors in Philadelphia.</p>
-        <p><em>Takeaway:</em> Big swaths of the grid are off-limits. Everything else in our story tries to
-          work around these lines and polygons.</p>
-      </article>
+  <main id="main" class="about-layout" role="main">
+    <article class="about-card" aria-labelledby="about-title">
+        <header>
+        <h1 id="about-title">About This Story Map</h1>
+        <p class="subtitle">Street vending rules & everyday spaces in Philadelphia</p>
+        </header>
 
-      <!-- Slide 2: Special vending districts -->
-      <article
-        class="slide"
-        id="second-slide"
-        data-files="Vending_Special_Districts.geojson"
-        data-showpopups="false"
-      >
-        <h2>Not All Sidewalks Are Equal</h2>
-        <p>Some places operate under special rules—think of them as “house rules” for vending. These districts
-          can open doors or add constraints depending on the neighborhood vibe and foot traffic rhythms.</p>
-        <p><em>Takeaway:</em> Same city, different playbooks. Vendors read the fine print street by street.</p>
-      </article>
+        <section>
+        <h2>Why This Map?</h2>
+        <p>
+            Philadelphia’s vendors navigate a patchwork of <strong>prohibited zones</strong>,
+            <strong>special districts</strong>, and <strong>small exceptions</strong>.
+            This map visualizes those rules alongside everyday demand signals like
+            bus stops and parks.
+        </p>
+        </section>
 
-      <!-- Slide 3: Exceptions -->
-      <article
-        class="slide"
-        id="third-slide"
-        data-files="Vending_Prohibition_Exceptions.geojson,Vending_Prohibited_Streets.geojson"
-        data-showpopups="true"
-      >
-        <h2>Threading the Needle</h2>
-        <p>Rules always leave seams. Exceptions are those tiny openings vendors memorize by heart—specific blocks,
-          time windows, or conditions that make a pitch possible.</p>
-        <p><em>Takeaway:</em> Opportunity often lives in the margins. Blink and you’ll miss it.</p>
-      </article>
+        <section>
+        <h2>Who It’s For</h2>
+        <p>
+            <em>Jasmine, a new food cart operator</em>—she needs to quickly see
+            where vending is legal and where customers actually gather.
+        </p>
+        </section>
 
-      <!-- Slide 4: Bus Shelters (demand proxy) -->
-      <article
-        class="slide"
-        id="fourth-slide"
-        data-files="bus_transit_shelters.geojson"
-        data-showpopups="false">
-        <span class="eyebrow">Ridership & Routine</span>
-        <h2>Where People Wait and Buy Snacks</h2>
-        <img style="max-width: 100%" src="https://www.phila.gov/media/20190531131415/New_Bus_Shelter_27_Credit_Intersection_small.jpg">
-        <p>Bus shelters are little beacons of everyday life—queues, quick bites, coffee, umbrellas on rainy days.
-          They hint at <em>steady foot traffic</em>, the kind that keeps small vendors afloat.</p>
-        <p class="muted"><strong>Takeaway:</strong> Compare these dots with the “no-go” layers. Are we pushing vendors
-          away from where riders actually are?</p>
-      </article>
-
-      <!-- Slide 5: Parks & Recreation Districts -->
-      <article
-        class="slide"
-        id="fifth-slide"
-        data-files="PPR_Properties.geojson"
-        data-showpopups="false"
-      >
-        <h2>Parks as Neighborhood Living Rooms</h2>
-        <img style="max-width: 100%;" src="https://www.visitphilly.com/wp-content/uploads/2019/03/Franklin-Square-_2017_J-Fusco-Historic-Philadelphia-Inc-1200x900-1044x781.jpg" alt="Philadelphia park scene">
-        <p>Parks and recreation properties cover a wide range of community spaces. These sites host weekend tournaments, summer camps, or casual family outings, 
-          and serve as everyday “third places.”</p>
-        <p><em>Takeaway:</em> With vending rules overlaid on these park units, the real question is whether small, 
-          low-cost services can be part of the park experience—or are pushed away from the very spaces where people gather.</p>
-      </article>
-
-    </section>
-
-    <!-- Credits panel (citations inside the interface) -->
-    <div class="credits-panel">
-      <details>
-        <summary>Data &amp; Citations</summary>
+        <section>
+        <h2>Data Sources</h2>
         <ul>
-          <li>
-            <a href="https://opendataphilly.org/datasets/vending-prohibited-areas/" target="_blank" rel="noopener">
-              Vending Prohibited Areas
-            </a> — City of Philadelphia (OpenDataPhilly)
-          </li>
-          <li>
-            <a href="https://opendataphilly.org/datasets/vending-prohibited-streets/" target="_blank" rel="noopener">
-              Vending Prohibited Streets
-            </a> — City of Philadelphia (OpenDataPhilly)
-          </li>
-          <li>
-            <a href="https://opendataphilly.org/datasets/special-vending-districts/" target="_blank" rel="noopener">
-              Special Vending Districts
-            </a> — City of Philadelphia (OpenDataPhilly)
-          </li>
-          <li>
-            <a href="https://opendataphilly.org/datasets/vending-prohibition-exceptions/" target="_blank" rel="noopener">
-              Vending Prohibition Exceptions
-            </a> — City of Philadelphia (OpenDataPhilly)
-          </li>
-          <li>
-            <a href="https://opendataphilly.org/datasets/bus-shelters/" target="_blank" rel="noopener">
-              Bus Transit Shelters
-            </a> — City of Philadelphia / Transit data portals
-          </li>
-          <li>
-            <a href="https://opendataphilly.org/datasets/ppr-properties/" target="_blank" rel="noopener">
-              PPR Properties
-            </a> — Philadelphia Parks &amp; Recreation
-            <span class="muted">
-              (filtered to community-facing classifications such as Neighborhood Parks, Playgrounds, Athletic Sites, Pools, etc.)
-            </span>
-          </li>
+            <li>
+              <a href="https://opendataphilly.org/" target="_blank" rel="noopener">
+                OpenDataPhilly
+              </a>
+            </li>
         </ul>
-      </details>
-    </div>
-  </main>
+        </section>
 
+        <footer class="about-footer">
+        <a class="btn btn-primary" href="map.html">➡️ Go to Story Map</a>
+        </footer>
+    </article>
+    </main>
+
+  <!-- Map + minimal JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="js/index.js" type="module"></script>
+  <script src="js/about.js" type="module"></script>
 </body>
 </html>
