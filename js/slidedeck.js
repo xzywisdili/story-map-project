@@ -1,14 +1,24 @@
+/* eslint-env browser, es2021 */
+
 /**
  * SlideDeck: supports multiple data files per slide; auto-styles by source tag.
  */
 class SlideDeck {
+  /**
+     * @param {HTMLElement[]} slides - Slide elements to sync with the map.
+     * @param {L.Map} map - Leaflet map instance.
+     */
   constructor(slides, map) {
     this.slides = slides;
     this.map = map;
     this.dataLayer = L.layerGroup().addTo(map);
     this.currentSlideIndex = 0;
   }
-
+  /**
+   * Replace the current Leaflet data layer with a new GeoJSON collection.
+   * @param {Object} collection - GeoJSON FeatureCollection to render.
+   * @return {Object} Leaflet GeoJSON layer added to the map.
+   */
   updateDataLayer(collection) {
     this.dataLayer.clearLayers();
 
@@ -19,25 +29,28 @@ class SlideDeck {
       // Lines
       if (/LineString/i.test(g)) {
         // Prohibited streets (default red)
-        let color = '#B10026', dashArray = '4,4';
-        if (src.includes('exceptions')) { color = '#2B8CBE'; dashArray = '0'; } // exception lines if any
+        let color = '#B10026';
+        let dashArray = '4,4';
+
+        // exception lines if any
+        if (src.includes('exceptions')) {
+          color = '#2B8CBE'; dashArray = '0';
+        }
         return { color, weight: 3, opacity: 0.9, dashArray };
       }
 
       // Polygons
       if (/Polygon/i.test(g)) {
-
         let fillColor = '#FD8D3C';
         let fillOpacity = 0.45;
 
-        if (src.includes('special')) {       
+        if (src.includes('special')) {
           fillColor = '#31A354';
         }
-        if (src.includes('ppr_properties')) {   
+        if (src.includes('ppr_properties')) {
           fillColor = '#2CA1B8';
           fillOpacity = 0.35;
         }
-
         return { color: '#666', weight: 1, fillColor, fillOpacity, opacity: 0.8 };
       }
 
@@ -64,10 +77,10 @@ class SlideDeck {
     const tooltipText = (f) => {
       const p = f.properties || {};
       const candidates = [
-        'label','name','Name','street','Street','TITLE','Title',
-        'STOP_NAME','SHELTER_NA','DISTRICT','PPR_DIST',
+        'label', 'name', 'Name', 'street', 'Street', 'TITLE', 'Title',
+        'STOP_NAME', 'SHELTER_NA', 'DISTRICT', 'PPR_DIST',
         // PPR:
-        'property_name','PROPERTY_NAME','SITE_NAME'
+        'property_name', 'PROPERTY_NAME', 'SITE_NAME',
       ];
       const k = candidates.find((kk) => p[kk] != null);
       return k ? p[k] : (p._src || '');
@@ -86,7 +99,7 @@ class SlideDeck {
       const text = tooltipText(feature);
       if (text) {
         layer.on('mouseover', () => layer.bindTooltip(text).openTooltip());
-        layer.on('mouseout',  () => layer.closeTooltip());
+        layer.on('mouseout', () => layer.closeTooltip());
       }
     };
 
@@ -94,79 +107,93 @@ class SlideDeck {
     return layer;
   }
 
+  /**
+   * Load and merge one or more GeoJSON files listed on a slide element.
+   * Applies PPR filtering rules and annotates each feature with `_src`.
+   * @param {HTMLElement} slide - The slide element with a `data-files` attribute.
+   * @return {Promise<Object>} Promise resolving to a merged GeoJSON FeatureCollection.
+   */
   async getSlideFeatureCollection(slide) {
-  const filesAttr = slide.getAttribute('data-files') || `${slide.id}.json`;
-  const files = filesAttr.split(',').map(s => s.trim());
+    const filesAttr = slide.getAttribute('data-files') || `${slide.id}.json`;
+    const files = filesAttr.split(',').map((s) => s.trim());
 
-  const PPR_KEEP = new Set([
-    'NEIGHBORHOOD_PARK',
-    'RECREATIONAL_PARK',
-    'PARK',
-    'PLAYGROUND_SITE',
-    'ATHLETIC_SITE',
-    'WATERSHED_PARK',
-    'CONSERVATION',  
-    'BREEZEWAY_GREENWAY'
-  ]);
+    const PPR_KEEP = new Set([
+      'NEIGHBORHOOD_PARK',
+      'RECREATIONAL_PARK',
+      'PARK',
+      'PLAYGROUND_SITE',
+      'ATHLETIC_SITE',
+      'WATERSHED_PARK',
+      'CONSERVATION',
+      'BREEZEWAY_GREENWAY',
+    ]);
 
-  const PPR_EXCLUDE = new Set([
-    'PPR_OPERATIONS_FACILITY',
-    'OPERATIONAL_INTERNAL',   
-    'OPERATIONAL_INTERNAL ',
-    'TRAFFIC_ISLAND_MEDIAN',
-    'TAFFIC_ISLAND_MEDIAN',  
-    'OTHER',
-    'MANAGED_SITE',          
-    'EVENT_VENUE',           
-    'OLDER_ADULT_CENTER'    
-  ]);
+    const PPR_EXCLUDE = new Set([
+      'PPR_OPERATIONS_FACILITY',
+      'OPERATIONAL_INTERNAL',
+      'OPERATIONAL_INTERNAL ',
+      'TRAFFIC_ISLAND_MEDIAN',
+      'TAFFIC_ISLAND_MEDIAN',
+      'OTHER',
+      'MANAGED_SITE',
+      'EVENT_VENUE',
+      'OLDER_ADULT_CENTER',
+    ]);
 
-  const features = [];
+    const features = [];
 
-  for (const fname of files) {
-    const resp = await fetch(`data/${fname}`);
-    const gj = await resp.json();
-    const srcTag = fname.replace(/\.geojson$/i, '');
+    for (const fname of files) {
+      const resp = await fetch(`data/${fname}`);
+      const gj = await resp.json();
+      const srcTag = fname.replace(/\.geojson$/i, '');
 
-    if (gj && gj.type === 'FeatureCollection' && Array.isArray(gj.features)) {
-      gj.features.forEach(f => {
-        f.properties = f.properties || {};
-        f.properties._src = srcTag;
+      if (gj && gj.type === 'FeatureCollection' && Array.isArray(gj.features)) {
+        gj.features.forEach((f) => {
+          f.properties = f.properties || {};
+          f.properties._src = srcTag;
 
-        if (/ppr_properties/i.test(srcTag)) {
-          const clsRaw =
+          if (/ppr_properties/i.test(srcTag)) {
+            const clsRaw =
             f.properties.property_classification ??
             f.properties.PROPERTY_CLASSIFICATION ??
             '';
-          const cls = String(clsRaw).trim().toUpperCase();
+            const cls = String(clsRaw).trim().toUpperCase();
 
-          if (PPR_EXCLUDE.has(cls)) return;
+            if (PPR_EXCLUDE.has(cls)) return;
 
-          if (PPR_KEEP.size > 0 && !PPR_KEEP.has(cls)) return;
+            if (PPR_KEEP.size > 0 && !PPR_KEEP.has(cls)) return;
 
-          f.properties._label_hint =
+            f.properties._label_hint =
             f.properties.property_name ||
             f.properties.PROPERTY_NAME ||
             f.properties.SITE_NAME ||
             f.properties.NAME ||
             null;
 
-          f.properties._ppr_class = cls;
-        }
+            f.properties._ppr_class = cls;
+          }
 
-        features.push(f);
-      });
+          features.push(f);
+        });
+      }
     }
+
+    return { type: 'FeatureCollection', features };
   }
 
-  return { type: 'FeatureCollection', features };
-}
-
-
+  /**
+     * Hide all slide elements by adding the 'hidden' class.
+     * @return {void}
+     */
   hideAllSlides() {
     for (const slide of this.slides) slide.classList.add('hidden');
   }
 
+  /**
+     * Update the map view and layers to match a specific slide.
+     * @param {HTMLElement} slide - Slide to sync to.
+     * @return {Promise<void>}
+     */
   async syncMapToSlide(slide) {
     slide.showpopups = (slide.getAttribute('data-showpopups') === 'true');
 
@@ -206,27 +233,42 @@ class SlideDeck {
     }
   }
 
+  /**
+     * Sync the map to the currently active slide index.
+     */
   syncMapToCurrentSlide() {
     const slide = this.slides[this.currentSlideIndex] || this.slides[0];
     this.syncMapToSlide(slide);
   }
 
+  /**
+     * Advance to the next slide (wraps around) and sync the map.
+     */
   goNextSlide() {
     this.currentSlideIndex++;
     if (this.currentSlideIndex === this.slides.length) this.currentSlideIndex = 0;
     this.syncMapToCurrentSlide();
   }
 
+  /**
+     * Go to the previous slide (wraps around) and sync the map.
+     */
   goPrevSlide() {
     this.currentSlideIndex--;
     if (this.currentSlideIndex < 0) this.currentSlideIndex = this.slides.length - 1;
     this.syncMapToCurrentSlide();
   }
 
+  /**
+     * Preload feature collections referenced by all slides (fire-and-forget).
+     */
   preloadFeatureCollections() {
     for (const slide of this.slides) this.getSlideFeatureCollection(slide);
   }
 
+  /**
+   * Recalculate which slide is current based on scroll position and sync the map if it changed.
+   */
   calcCurrentSlideIndex() {
     const scrollPos = window.scrollY;
     const windowHeight = window.innerHeight;
